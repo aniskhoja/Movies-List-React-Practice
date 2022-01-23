@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 
 const Pagination = ({ pageSize, itemCount, onPageChange, onCurrentPage }) => {
  
@@ -11,15 +12,23 @@ const Pagination = ({ pageSize, itemCount, onPageChange, onCurrentPage }) => {
         array.push(i + 1) 
     }
 
-  return <nav aria-label="Page navigation example">
-      
-  <ul className="pagination">
-    {array.map(page => 
-        <li key={page} style={{ cursor: 'pointer'}} className={page === onCurrentPage ? "page-item active" : "page-item"} >
-            <a className="page-link" href onClick={ () => {onPageChange(page)} } >{page}</a></li>
-    )}
-  </ul>
-</nav>;
+    return (
+        <nav aria-label="Page navigation example">
+ 
+            <ul className="pagination">
+                {array.map(page =>
+                    <li key={page} style={{ cursor: 'pointer' }} className={page === onCurrentPage ? "page-item active" : "page-item"} >
+                        <a className="page-link" onClick={() => { onPageChange(page) }} >{page}</a></li>
+                )}
+            </ul>
+        </nav>);
+}
+
+Pagination.propTypes = {
+    pageSize: PropTypes.number.isRequired,
+    itemCount: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    onCurrentPage: PropTypes.number.isRequired
 }
 
 export default Pagination;
