@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class like extends Component {
+export default class Like extends Component {
   render() {
       return (
           <i onClick={this.props.onLike}

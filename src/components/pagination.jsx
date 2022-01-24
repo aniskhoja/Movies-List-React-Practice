@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 
 const Pagination = ({ pageSize, itemCount, onPageChange, onCurrentPage }) => {
- 
+    
     let array = []
     let pageCount = Math.ceil(itemCount / pageSize)
     if (pageCount === 1) {
@@ -13,6 +13,7 @@ const Pagination = ({ pageSize, itemCount, onPageChange, onCurrentPage }) => {
     }
 
     return (
+        
         <nav aria-label="Page navigation example">
  
             <ul className="pagination">

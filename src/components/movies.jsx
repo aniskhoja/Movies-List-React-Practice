@@ -53,39 +53,44 @@ export default class Movies extends Component {
         const { pageSize, currentPage, selectedGenre, movies, sortColumn } = this.state;
 
         if (count === 0) return <p>There are no movie record</p>;
-        const filtered = (selectedGenre._id) ? movies.filter(m => m.genre._id === selectedGenre._id) : movies
-       
+        
         // let object = sortColumn.path.split('.');
         // console.log(object[0])
         // const moviesSort = filtered.sort(
-        //     (sortColumn.order === "desc") ?
-        //     (!object[1]) ?
-        //     ((a, b) => a[sortColumn.path] < b[sortColumn.path] ? -1 : 1) : 
-        //     ((a, b) => a[object[0]][object[1]] < b[object[0]][object[1]] ? -1 : 1)
-        //         : 
-        //     (!object[1]) ?
-        //     ((a, b) => a[sortColumn.path] < b[sortColumn.path] ? 1 : -1) : 
-        //     ((a, b) => a[object[0]][object[1]] < b[object[0]][object[1]] ? 1 : -1)
-        //     )
-
-        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
-        let moviesList = this.paginate(currentPage, pageSize, sorted);
+            //     (sortColumn.order === "desc") ?
+            //     (!object[1]) ?
+            //     ((a, b) => a[sortColumn.path] < b[sortColumn.path] ? -1 : 1) : 
+            //     ((a, b) => a[object[0]][object[1]] < b[object[0]][object[1]] ? -1 : 1)
+            //         : 
+            //     (!object[1]) ?
+            //     ((a, b) => a[sortColumn.path] < b[sortColumn.path] ? 1 : -1) : 
+            //     ((a, b) => a[object[0]][object[1]] < b[object[0]][object[1]] ? 1 : -1)
+            //     )
+            
+        var { totalCount, data } = this.getPageData(selectedGenre, movies, sortColumn, currentPage, pageSize);
         
         return (
             <div className="row">
-                <p> Showing {filtered.length} movies in database </p>
+                <p> Showing {totalCount} movies in database </p>
                 <div className="col-2">
                     <ListGenres genreItems={this.state.genres} selectedItem={this.state.selectedGenre} onItemSelect={this.handleGenreChange} />
                 </div>
                 <div className="col">
-                    <MoviesTable movies={moviesList} onLike={ this.handleLike } sortColumn={sortColumn} onSort={ this.handleSort } onDelete={ this.handleDelete }/>
-                    <Pagination itemCount={filtered.length} pageSize={pageSize} onCurrentPage={currentPage} onPageChange={this.handlePageChange} />
+                    <MoviesTable movies={data} onLike={ this.handleLike } sortColumn={sortColumn} onSort={ this.handleSort } onDelete={ this.handleDelete }/>
+                    <Pagination itemCount={totalCount} pageSize={pageSize} onCurrentPage={currentPage} onPageChange={this.handlePageChange} />
                 </div>
             </div>
         );
     };
 
-    paginate(currentPage, pageSize, filtered) {
+    getPageData = (selectedGenre, movies, sortColumn, currentPage, pageSize) => {
+        const filtered = (selectedGenre._id) ? movies.filter(m => m.genre._id === selectedGenre._id) : movies;
+        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+        let moviesList = this.paginate(currentPage, pageSize, sorted);
+        return { totalCount : filtered.length, data : moviesList };
+    }
+
+    paginate = (currentPage, pageSize, filtered) => {
         let index = (currentPage - 1) * pageSize;
         let movies = [];
         for (let i = index; i < (pageSize + index); i++) {
