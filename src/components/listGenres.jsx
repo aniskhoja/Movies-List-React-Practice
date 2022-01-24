@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types'
 const ListGenres = (props) => {
     const { genreItems, onItemSelect, textProperty, valueProperty, selectedItem } = props
     return <ul className="list-group">
@@ -15,6 +15,12 @@ const ListGenres = (props) => {
 ListGenres.defaultProps = {
     textProperty: 'name',
     valueProperty: '_id'
+}
+
+ListGenres.propTypes = {
+    genreItems: PropTypes.array.isRequired,
+    onItemSelect: PropTypes.func.isRequired,
+    selectedItem: PropTypes.any.isRequired
 }
 
 export default ListGenres;
